@@ -1,12 +1,10 @@
 import React from "react";
-
+import { Game } from "./Game";
+import { CardStateProvider } from "./CardStateContext";
 export function App() {
     return (
-        <div>
-            <h1>Welcome to React</h1>
-            <p>
-                This is a minimal React app with TypeScript and Webpack.
-            </p>
-        </div>
-    );
+        <CardStateProvider >
+            <Game/>
+        </CardStateProvider>
+    )
 }

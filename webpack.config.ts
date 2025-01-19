@@ -1,9 +1,14 @@
 import { resolve as _resolve } from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 
-export const entry = './src/index.tsx';
+export const entry = {
+    app: './src/index.tsx',
+    // css: './public/main.css',
+}
+
 export const output = {
     filename: 'static/js/[name].[contenthash].js', // Use contenthash for cache-busting
     path: _resolve(__dirname, 'build'), // Output to the 'build' directory
@@ -22,6 +27,7 @@ export const module = {
         {
             test: /\.css$/, // CSS loader
             use: ['style-loader', 'css-loader'],
+            sideEffects: true,
         },
         {
             test: /\.(png|svg|jpg|jpeg|gif|ico)$/i, // Asset loader for images
@@ -40,6 +46,16 @@ export const plugins = [
     new CleanWebpackPlugin(), // Cleans the 'build' folder before each build
     new HtmlWebpackPlugin({
         template: './public/index.html', // Template for generating 'index.html'
+    }),
+    new CopyWebpackPlugin({
+        patterns: [
+            {
+                from: 'public', // Copy all files from 'public' to 'build'
+                globOptions: {
+                    ignore: ['**/index.html'], // Ignore 'index.html'
+                },
+            },
+        ],
     }),
 ];
 export const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
